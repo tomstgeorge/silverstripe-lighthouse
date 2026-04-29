@@ -21,6 +21,8 @@ class LighthouseExtension extends Extension
 
     public function updateCMSFields(FieldList $fields): void
     {
+        $fields->removeByName('LighthouseScores');
+
         $latest = $this->getOwner()->LighthouseScores()->first();
 
         $content = '';
