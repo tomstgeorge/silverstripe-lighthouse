@@ -75,9 +75,9 @@ class PageSpeedService
             return null;
         }
 
-        // Append audit bypass token for staging sites behind auth
+        // Append audit bypass token for non-live environments behind auth
         $token = Environment::getEnv('AUDIT_BYPASS_TOKEN');
-        if ($token) {
+        if ($token && !Director::isLive()) {
             $separator = str_contains($url, '?') ? '&' : '?';
             $url .= $separator . '_audit=' . urlencode($token);
         }
