@@ -23,11 +23,18 @@ class LighthouseExtension extends Extension
     {
         $fields->removeByName('LighthouseScores');
 
-        $latest = $this->getOwner()->LighthouseScores()->first();
+        $scores = $this->getOwner()->LighthouseScores();
+        $latestMobile = $scores->filter('Strategy', 'mobile')->first();
+        $latestDesktop = $scores->filter('Strategy', 'desktop')->first();
 
         $content = '';
-        if ($latest) {
-            $content = $this->renderScoreCard($latest);
+        if ($latestMobile || $latestDesktop) {
+            if ($latestMobile) {
+                $content .= $this->renderScoreCard($latestMobile);
+            }
+            if ($latestDesktop) {
+                $content .= $this->renderScoreCard($latestDesktop);
+            }
         } else {
             $content = '<p class="message info">No Lighthouse scores yet. Publish this page to trigger a scan.</p>';
         }
@@ -37,7 +44,7 @@ class LighthouseExtension extends Extension
             GridField::create(
                 'LighthouseScores',
                 'Score History',
-                $this->getOwner()->LighthouseScores(),
+                $scores,
                 GridFieldConfig_RecordViewer::create()
             ),
         ]);
@@ -67,7 +74,10 @@ class LighthouseExtension extends Extension
         if (!SiteConfig::current_site_config()->LighthouseApiKey) {
             return;
         }
-        LighthouseJob::queue($this->getOwner()->ID, 'mobile', get_class($this->getOwner()));
+        $id = $this->getOwner()->ID;
+        $class = get_class($this->getOwner());
+        LighthouseJob::queue($id, 'mobile', $class);
+        LighthouseJob::queue($id, 'desktop', $class);
     }
 
     private function renderScoreCard(LighthouseScore $score): string

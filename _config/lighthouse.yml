@@ -8,11 +8,3 @@ SilverStripe\Core\Injector\Injector:
 SilverStripe\SiteConfig\SiteConfig:
   extensions:
     - DiveShop365\Lighthouse\Extension\LighthouseSiteConfigExtension
-
-Page:
-  extensions:
-    lighthouse: DiveShop365\Lighthouse\Extension\LighthouseExtension
-
-DiveShop365\GroupTrips\Model\GroupTrip:
-  extensions:
-    lighthouse: DiveShop365\Lighthouse\Extension\LighthouseExtension
