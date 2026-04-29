@@ -11,8 +11,8 @@ SilverStripe\SiteConfig\SiteConfig:
 
 Page:
   extensions:
-    - DiveShop365\Lighthouse\Extension\LighthouseExtension
+    lighthouse: DiveShop365\Lighthouse\Extension\LighthouseExtension
 
 DiveShop365\GroupTrips\Model\GroupTrip:
   extensions:
-    - DiveShop365\Lighthouse\Extension\LighthouseExtension
+    lighthouse: DiveShop365\Lighthouse\Extension\LighthouseExtension
