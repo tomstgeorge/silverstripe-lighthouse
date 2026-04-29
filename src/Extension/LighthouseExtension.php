@@ -11,6 +11,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig_RecordViewer;
 use SilverStripe\Forms\LiteralField;
+use SilverStripe\SiteConfig\SiteConfig;
 
 class LighthouseExtension extends Extension
 {
@@ -63,6 +64,9 @@ class LighthouseExtension extends Extension
 
     private function queueScan(): void
     {
+        if (!SiteConfig::current_site_config()->LighthouseApiKey) {
+            return;
+        }
         LighthouseJob::queue($this->getOwner()->ID, 'mobile', get_class($this->getOwner()));
     }
 
