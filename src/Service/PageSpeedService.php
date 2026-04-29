@@ -28,14 +28,13 @@ class PageSpeedService
         }
 
         $client = new Client(['timeout' => 120]);
-        $response = $client->get(self::API_URL, [
-            'query' => [
-                'url' => $url,
-                'key' => $apiKey,
-                'strategy' => $strategy,
-                'category' => ['performance', 'accessibility', 'best-practices', 'seo'],
-            ],
-        ]);
+        $queryString = http_build_query([
+            'url' => $url,
+            'key' => $apiKey,
+            'strategy' => $strategy,
+        ]) . '&category=performance&category=accessibility&category=best-practices&category=seo';
+
+        $response = $client->get(self::API_URL . '?' . $queryString);
 
         $data = json_decode((string) $response->getBody(), true);
         $categories = $data['lighthouseResult']['categories'] ?? [];
