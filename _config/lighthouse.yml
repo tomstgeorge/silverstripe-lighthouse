@@ -1,0 +1,18 @@
+---
+Name: diveshop365-lighthouse
+---
+SilverStripe\Core\Injector\Injector:
+  DiveShop365\Lighthouse\Service\PageSpeedService:
+    class: DiveShop365\Lighthouse\Service\PageSpeedService
+
+SilverStripe\SiteConfig\SiteConfig:
+  extensions:
+    - DiveShop365\Lighthouse\Extension\LighthouseSiteConfigExtension
+
+Page:
+  extensions:
+    - DiveShop365\Lighthouse\Extension\LighthouseExtension
+
+DiveShop365\GroupTrips\Model\GroupTrip:
+  extensions:
+    - DiveShop365\Lighthouse\Extension\LighthouseExtension
