@@ -7,6 +7,7 @@ namespace DiveShop365\Lighthouse\Service;
 use DiveShop365\Lighthouse\Model\LighthouseScore;
 use GuzzleHttp\Client;
 use SilverStripe\Control\Director;
+use SilverStripe\Core\Environment;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\SiteConfig\SiteConfig;
 
@@ -63,12 +64,24 @@ class PageSpeedService
 
     private function resolveUrl(DataObject $record): ?string
     {
+        $url = null;
         if ($record->hasMethod('AbsoluteLink')) {
-            return $record->AbsoluteLink();
+            $url = $record->AbsoluteLink();
+        } elseif ($record->hasMethod('Link')) {
+            $url = Director::absoluteURL($record->Link());
         }
-        if ($record->hasMethod('Link')) {
-            return Director::absoluteURL($record->Link());
+
+        if (!$url) {
+            return null;
         }
-        return null;
+
+        // Append audit bypass token for staging sites behind auth
+        $token = Environment::getEnv('AUDIT_BYPASS_TOKEN');
+        if ($token) {
+            $separator = str_contains($url, '?') ? '&' : '?';
+            $url .= $separator . '_audit=' . urlencode($token);
+        }
+
+        return $url;
     }
 }
