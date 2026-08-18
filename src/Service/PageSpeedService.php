@@ -74,6 +74,12 @@ class PageSpeedService
             return null;
         }
 
+        // Google's PageSpeed API cannot reach local dev domains
+        $host = parse_url($url, PHP_URL_HOST) ?: '';
+        if (str_ends_with($host, '.local.test')) {
+            return null;
+        }
+
         // Append audit bypass token for non-live environments behind auth
         $token = Environment::getEnv('AUDIT_BYPASS_TOKEN');
         if ($token && !Director::isLive()) {
